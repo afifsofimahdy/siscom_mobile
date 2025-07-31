@@ -3,7 +3,9 @@
 import 'package:get/get.dart';
 import 'package:siscom_mobile/app/modules/product/bindings/product_add_binding.dart';
 import 'package:siscom_mobile/app/modules/product/bindings/product_binding.dart';
+import 'package:siscom_mobile/app/modules/product/bindings/product_edit_binding.dart';
 import 'package:siscom_mobile/app/modules/product/views/product_add_view.dart';
+import 'package:siscom_mobile/app/modules/product/views/product_edit_view.dart';
 import 'package:siscom_mobile/app/modules/product/views/product_view.dart';
 import 'package:siscom_mobile/app/modules/splash/bindings/splash_binding.dart';
 import 'package:siscom_mobile/app/modules/splash/views/splash_view.dart';
@@ -31,6 +33,12 @@ class AppPages {
       name: _Paths.PRODUCT_ADD,
       page: () => const ProductAddView(),
       binding: ProductAddBinding(),
+    ),
+
+    GetPage(
+      name: _Paths.PRODUCT_EDIT,
+      page: () => const ProductEditView(),
+      binding: ProductEditBinding(),
     ),
   ];
 }

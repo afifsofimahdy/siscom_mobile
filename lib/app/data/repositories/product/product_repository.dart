@@ -111,13 +111,16 @@ class ProductRepository {
 
   Future<bool> updateProduct(String id, Product product) async {
     try {
-      final response = await _apiService.put(
+      final response = await _apiService.patch(
         ApiEndpoint.updateProduct(id),
         data: {
-          'name': product.name,
-          'description': product.description,
-          'price': product.price,
-          // Add other product properties as needed
+          if (product.name?.isNotEmpty == true) 'name': product.name,
+          if (product.description?.isNotEmpty == true) 'description': product.description,
+          if (product.price != null && product.price! >= 0) 'price': product.price,
+          if (product.stock != null && product.stock! >= 0) 'stock': product.stock,
+          if (product.imageUrl?.isNotEmpty == true) 'image_url': product.imageUrl,
+          if (product.categoryId?.isNaN == true) 'categoryId': product.categoryId,
+          if (product.groupItem?.isNotEmpty == true) 'group_item': product.groupItem,
         },
       );
       if (response.statusCode == 200) {

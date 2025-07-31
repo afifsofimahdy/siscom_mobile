@@ -37,11 +37,23 @@ class ProductDetailBottomSheet extends StatelessWidget {
           Center(
             child: ClipRRect(
               borderRadius: BorderRadius.circular(8.r),
-              child: Image.network(
-                'https://upload.wikimedia.org/wikipedia/commons/thumb/a/ac/No_image_available.svg/600px-No_image_available.svg.png',
+              child: CachedNetworkImage(
+                imageUrl: 'https://upload.wikimedia.org/wikipedia/commons/thumb/a/ac/No_image_available.svg/600px-No_image_available.svg.png',
                 height: 150.h,
                 width: double.infinity,
                 fit: BoxFit.cover,
+                errorWidget: (context, url, error) => Container(
+                  height: 150.h,
+                  width: double.infinity,
+                  color: Colors.grey[200],
+                  child: Icon(Icons.image_not_supported, size: 50.sp),
+                ),
+                placeholder: (context, url) => Container(
+                  height: 150.h,
+                  width: double.infinity,
+                  color: Colors.grey[200],
+                  child: Center(child: CircularProgressIndicator()),
+                ),
               ),
             ),
           ),
