@@ -92,7 +92,10 @@ class ProductRepository {
           'name': product.name,
           'description': product.description,
           'price': product.price,
-          // Add other product properties as needed
+          'stock': product.stock,
+          'image_url': product.imageUrl,
+          'categoryId': product.categoryId,
+          'group_item': product.groupItem,
         },
       );
       if (response.statusCode == 201) {
@@ -141,6 +144,23 @@ class ProductRepository {
       return false;
     } catch (error) {
       Get.log('Error deleting product: $error', isError: true);
+      return false;
+    }
+  }
+
+  Future<bool> deleteBatchProducts(List<int> ids) async {
+    try {
+      final response = await _apiService.delete(
+        ApiEndpoint.deleteBatchProducts(),
+        data: {'ids': ids},
+      );
+      if (response.statusCode == 200) {
+        _products.removeWhere((product) => ids.contains(product.id));
+        return true;
+      }
+      return false;
+    } catch (error) {
+      Get.log('Error deleting batch products: $error', isError: true);
       return false;
     }
   }

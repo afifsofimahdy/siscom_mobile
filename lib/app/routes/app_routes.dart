@@ -12,4 +12,5 @@ abstract class _Paths {
   _Paths._();
   static const SPLASH = '/splash';
   static const PRODUCT = '/product';
+  static const PRODUCT_ADD = '/product/add';
 }

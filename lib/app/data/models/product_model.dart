@@ -64,7 +64,7 @@ class Meta {
 }
 
 class Product {
-  final int id;
+  final int? id;
   final String name;
   final String description;
   final int price;
@@ -72,12 +72,12 @@ class Product {
   final String imageUrl;
   final String groupItem;
   final int categoryId;
-  final DateTime createdAt;
-  final DateTime updatedAt;
-  final Category category;
+  DateTime? createdAt;
+  DateTime? updatedAt;
+  Category? category;
 
   Product({
-    required this.id,
+    this.id,
     required this.name,
     required this.description,
     required this.price,
@@ -85,9 +85,9 @@ class Product {
     required this.imageUrl,
     required this.groupItem,
     required this.categoryId,
-    required this.createdAt,
-    required this.updatedAt,
-    required this.category,
+    this.createdAt,
+    this.updatedAt,
+    this.category,
   });
 
   factory Product.fromJson(Map<String, dynamic> json) {

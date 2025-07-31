@@ -11,6 +11,7 @@ class ApiEndpoint {
   static String createProduct() => '$baseUrl/products';
   static String updateProduct(String id) => '$baseUrl/products/$id';
   static String deleteProduct(String id) => '$baseUrl/products/$id';
+  static String deleteBatchProducts() => '$baseUrl/products/batch';
 
   // Categories
   static String getCategories({int page = 1}) => '$baseUrl/categories?page=$page';

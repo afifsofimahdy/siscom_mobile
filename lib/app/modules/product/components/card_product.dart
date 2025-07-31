@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:siscom_mobile/app/utils/themes/colors.dart';
 
 class CardProduct extends StatelessWidget {
   final String productName;
@@ -49,6 +50,7 @@ class CardProduct extends StatelessWidget {
               child: Checkbox(
                 value: isSelected,
                 onChanged: onChanged,
+                activeColor: AppColors.primaryColor,
                 materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
                 visualDensity: VisualDensity.compact,
               ),

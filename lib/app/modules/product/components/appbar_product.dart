@@ -26,49 +26,40 @@ class AppBarProduct extends StatelessWidget {
             )
           ],
         ),
-        child: Row(
-          children: [
-            Padding(
-              padding: EdgeInsets.symmetric(horizontal: 8.w),
-              child: SizedBox(
-                height: 54.h,
-                width: 0.8.sw,
-                child: Padding(
-                  padding: EdgeInsets.only(top: 10.h),
-                  child: TextFormField(
-                    controller: searchController,
-                    decoration: InputDecoration(
-                      prefixIcon: Icon(
-                        LineIcons.search,
-                        size: 24.sp,
-                        color: AppColors.textGrey,
-                      ),
-                      border: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(10.r),
-                        borderSide: BorderSide(color: AppColors.primaryColor.withOpacity(0.7)),
-                      ),
-                      focusedBorder: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(10.r),
-                        borderSide: BorderSide(color: AppColors.primaryColor.withOpacity(0.7)),
-                      ),
-                      enabledBorder: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(10.r),
-                        borderSide: BorderSide(color: AppColors.primaryColor.withOpacity(0.7)),
-                      ),
-                      contentPadding: EdgeInsets.fromLTRB(20.w, 16.h, 20.w, 0),
-                    ),
+        child: Padding(
+          padding: EdgeInsets.symmetric(horizontal: 8.w),
+          child: SizedBox(
+            height: 54.h,
+            width: 0.8.sw,
+            child: Padding(
+              padding: EdgeInsets.only(top: 10.h),
+              child: TextFormField(
+                controller: searchController,
+                decoration: InputDecoration(
+                  prefixIcon: Icon(
+                    LineIcons.search,
+                    size: 24.sp,
+                    color: AppColors.textGrey,
                   ),
+                  border: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(10.r),
+                    borderSide: BorderSide(color: AppColors.primaryColor.withOpacity(0.7)),
+                  ),
+                  focusedBorder: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(10.r),
+                    borderSide: BorderSide(color: AppColors.primaryColor.withOpacity(0.7)),
+                  ),
+                  enabledBorder: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(10.r),
+                    borderSide: BorderSide(color: AppColors.primaryColor.withOpacity(0.7)),
+                  ),
+                  contentPadding: EdgeInsets.fromLTRB(20.w, 16.h, 20.w, 0),
                 ),
               ),
             ),
-            Icon(
-              LineIcons.filter,
-              size: 28.sp,
-              color: AppColors.textGrey,
-            )
-          ],
+          ),
         ),
       ),
-    );
+    );  
   }
 }

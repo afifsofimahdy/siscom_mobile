@@ -1,9 +1,10 @@
+// ignore_for_file: prefer_const_constructors
+
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:logger/logger.dart';
 import 'package:siscom_mobile/app/data/models/category_model.dart';
 import 'package:siscom_mobile/app/data/models/product_model.dart';
-import 'package:siscom_mobile/app/data/repositories/category/category_repository.dart';
 import 'package:siscom_mobile/app/data/repositories/product/product_repository.dart';
 
 class ProductController extends GetxController {
@@ -12,16 +13,14 @@ class ProductController extends GetxController {
   final RxList<Product> filteredProducts = <Product>[].obs;
   final RxBool isLoading = true.obs;
   final RxBool hasMoreData = true.obs;
-  final RxList<Category> categories = <Category>[].obs;
   final Rx<Product?> selectedProduct = Rx<Product?>(null);
   final Rx<Category?> selectedCategory = Rx<Category?>(null);
   final RxInt currentPage = 1.obs;
   final RxInt totalPages = 1.obs;
   final RxInt totalItems = 0.obs;
   final RxInt pageSize = 10.obs;
-  final RxList groupItems = [
-    'Laptop','Smartphone','Aksesoris','Komponen'
-  ].obs;
+  // Track selected products with their quantities
+  final RxMap<int, int> selectedProducts = <int, int>{}.obs;
 
   final ScrollController scrollController = ScrollController();
 
@@ -30,7 +29,6 @@ class ProductController extends GetxController {
     super.onInit();
     searchController.addListener(() {
       filterProducts();
-      update();
     });
 
     scrollController.addListener(() {
@@ -44,8 +42,10 @@ class ProductController extends GetxController {
 
   @override 
   void onReady() {
-    fetchCategories();
     fetchProducts(reset: true);
+    searchController.addListener(() {
+      filterProducts();
+    });
     super.onReady();
   }
 
@@ -61,27 +61,42 @@ class ProductController extends GetxController {
       products.where((product) => 
         product.name.toLowerCase().contains(query) ||
         product.groupItem.toLowerCase().contains(query) ||
-        product.category.name.toLowerCase().contains(query)
+        product.category!.name.toLowerCase().contains(query)
       ).toList()
     );
     update(); 
   }
 
-  void fetchCategories() async {
-    try {
-      isLoading.value = true;
-      final categoryRepository = Get.find<CategoryRepository>();
-      final fetchedCategories = await categoryRepository.getCategories();
-      if (fetchedCategories.isNotEmpty) {
-        categories.assignAll(fetchedCategories);
-      } else {
-        categories.clear();
-      }
-    } catch (error) {
-      Get.snackbar('Error', 'Failed to load categories: $error');
-    } finally {
-      isLoading.value = false;
+  // Enhanced methods for checkbox and quantity functionality
+  void toggleProductSelection(int productId) {
+    if (selectedProducts.containsKey(productId)) {
+      selectedProducts.remove(productId);
+    } else {
+      selectedProducts[productId] = 1; // Default quantity when selected
     }
+    update();
+  }
+
+  void updateProductQuantity(int productId, int quantity) {
+    if (quantity > 0) {
+      selectedProducts[productId] = quantity;
+    } else {
+      selectedProducts.remove(productId);
+    }
+    update();
+  }
+
+  bool isProductSelected(int productId) {
+    return selectedProducts.containsKey(productId);
+  }
+
+  int getProductQuantity(int productId) {
+    return selectedProducts[productId] ?? 0;
+  }
+
+  void clearSelectedProducts() {
+    selectedProducts.clear();
+    update();
   }
 
   Future<void> fetchProducts({bool reset = false}) async {
@@ -90,6 +105,8 @@ class ProductController extends GetxController {
         currentPage.value = 1;
         products.clear();
         hasMoreData.value = true;
+        // Clear selections on reset
+        clearSelectedProducts();
       }
       isLoading.value = true;
 
@@ -191,6 +208,34 @@ class ProductController extends GetxController {
     } finally {
       isLoading.value = false;
     }
+  }
+
+  Future<void> deleteSelectedProducts() async {
+    try {
+      isLoading.value = true;
+      final productRepository = Get.find<ProductRepository>();
+      final productIds = selectedProducts.keys.map((id) => id).toList();
+
+      final success = await productRepository.deleteBatchProducts(productIds);
+      
+      if (success) {
+        fetchProducts(reset: true);
+        clearSelectedProducts();
+        Get.snackbar('Success', 'Selected products deleted successfully');
+      } else {
+        Get.snackbar('Error', 'Failed to delete some or all selected products');
+      }
+    } catch (error) {
+      Get.snackbar('Error', 'Failed to delete selected products: $error');
+    } finally {
+      isLoading.value = false;
+    }
+  }
+
+  void navigateToProductAddView() {
+    Get.toNamed(
+      '/product/add',
+    );
   }
 
   @override
